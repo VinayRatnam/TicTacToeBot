@@ -16,17 +16,17 @@ public:
 private:
 
     // Changes board based on player action
-    void playerAction(int player, int row, int col) {
+    void playerAction(int player, pair<int,int> pos) {
         if (player == 1) {
-            grid[row][col] = 1;
+            grid[pos.first][pos.second] = 1;
         }
 
         if (player == 2) {
-            grid[row][col] = 2;
+            grid[pos.first][pos.second] = 2;
         }
 
         // update episode history
-        episode_history.push_back(<row, col>);
+        episode_history.push_back(<pos.first, pos.second>);
     }
 
     //checks if game has ended; 0 = draw, 1 = player 1 has won, 2 = player 2 has won

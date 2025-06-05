@@ -9,11 +9,15 @@
 #include <string>
 #include <set>
 #include <algorithm>
+#include <random>
 using namespace std;
 
 class Players {
 public:
     map<string, map<int, float>> action_values;
+    map<string, map<int, float>> policies;
+    default_random_engine generator(12345); //Using a fixed seed
+    uniform_real_distribution<float> distribution(0.0, 1.0);
 
     int move = 0;
     vector<int> rewards {-1,0,-1};
@@ -24,7 +28,45 @@ public:
         createStates(initial_state);
     }
 
-    trainWithMC
+    pair<int,int> convertToBoardSpot(int val) {
+        // hard encode conversions
+        switch (val) {
+            case 0:
+                return {0,0};
+            case 1:
+                return {0,1};
+            case 2:
+                return {0,2};
+            case 3:
+                return {1,0};
+            case 4:
+                return {1,1};
+            case 5:
+                return {1,2};
+            case 6:
+                return {2,0};
+            case 7:
+                return {2,1};
+            case 8:
+                return {2,2};
+        }
+    }
+
+    // takes in board position as input and spits out move
+    pair<int,int> makeMoveMC(string curr_state) {
+        // access policy for specific state
+        map<int, float> policy = policies[curr_state];
+        float decision = distribution(generator);
+
+        float curr_prob = 0.0;
+        for (auto iter = policy.begin(); iter != policy.end(); iter++) {
+            curr_prob += iter->second;
+            if (decision <= curr_prob) {
+                return convertToBoardSpot(iter->first);
+            }
+        }
+
+    }
 
 private:
     void createStates(pair<string, pair<int,int>> curr_state) {
@@ -32,12 +74,28 @@ private:
             //this is a finalized state
             //calculate the possible actions for said state
             map<int, float> actions;
+            map<int, float> policy;
             for (int i = 0; i < 9; i++) {
                 if (curr_state.first[i] == 'a') {
-                    actions[i] = 0.0;
+                    actions[i] = 0.0; policy[i] = 0.0;
                 }
             }
+
+            // create the uniform distribution for policies in each state
+            float uniform_val;
+            if (policy.empty()) {
+                // Handle the case of an empty map, e.g., set uniform_val to 0 or throw an error
+                uniform_val = 0.0f; // Or some other appropriate handling
+                std::cerr << "Warning: actions map is empty, cannot calculate uniform value." << std::endl;
+            } else {
+                uniform_val = 1.0f / policy.size(); // Use 1.0f to ensure floating-point division
+            }
+
+            for (auto iter = policy.begin(); iter != policy.end(); iter++) {
+                iter->second = uniform_val;
+            }
             action_values[curr_state.first] = actions;
+            policies[curr_state.first] = policy;
         }
 
         else {
@@ -50,4 +108,16 @@ private:
             createStates({curr_state.first + 'a', curr_state.second});
         }
     }
+
+};
+
+class Player1 : public Player {
+public:
+
+
+
+};
+
+class Player2 : public Player {
+
 };
