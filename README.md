@@ -25,4 +25,4 @@ the agent could learn what moves prior to its loss, victory, or draw gave it the
 
 ### Rewards for Q-Learning
 The rewards for winning and losing are the same, but in Q-learning, we adjust the action-value functions according to the maximum reward for the next state the agent went to. This way of learning allows the agent to learn
-immediately after making a move rather than waiting for the game to end to calculate the rewards of moves in the trajectory history.
+immediately after making a move rather than waiting for the game to end to calculate the returns of moves in the trajectory history.
