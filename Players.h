@@ -17,15 +17,16 @@ class Players {
 public:
     map<string, map<int, float>> action_values;
     map<string, map<int, float>> policies;
+    map<string, map<int, float>> uniform_policy;
     default_random_engine generator;
     uniform_real_distribution<float> distribution;
-
-    vector<int> rewards {-1,0,-1};
 
     Players() : generator(12345), distribution(0.0f,1.0f) { //default constructor should initialize states for training
         // create states
         pair<string, pair<int, int>> initial_state {"", {0,0}};
         createStates(initial_state);
+
+        uniform_policy = policies;
     }
 
     pair<int,int> convertToBoardSpot(int val) {
@@ -54,21 +55,60 @@ public:
         }
     }
 
-    // takes in board position as input and spits out move
-    pair<int,int> makeMoveMC(string curr_state) {
+    // takes in board position as input and spits out move; takes epsilon into account
+    pair<int,int> makeMoveMC(string curr_state, float epsilon) {
         // access policy for specific state
-        map<int, float> policy = policies[curr_state];
+        map<int, float> policy;
+        bool random_move = (distribution(generator) < epsilon);
+        float curr_prob = 0.0;
+
+
+        if (random_move) {
+            policy = uniform_policy[curr_state];
+        }
+        else {
+            policy = policies[curr_state];
+        }
+
         float decision = distribution(generator);
 
-        float curr_prob = 0.0;
         for (auto iter = policy.begin(); iter != policy.end(); iter++) {
             curr_prob += iter->second;
             if (decision <= curr_prob) {
                 return convertToBoardSpot(iter->first);
             }
         }
-        auto iter2 = policy.crbegin();
-        return convertToBoardSpot(iter2->first);
+
+        if (!policy.empty()) {
+            // Return the last action in the policy as a safe fallback
+            return convertToBoardSpot(policy.rbegin()->first);
+        }
+
+        // If the policy was empty, there are no moves to make from this state.
+        // Return an invalid move to signal this.
+        return {-1, -1};
+    }
+
+
+    void changeStates(vector<pair<int, int>> &episode_history, string &grid_string, int victory) {
+        int player1_reward;
+        int player2_reward;
+
+        // iterate backwards through moves and adjust action-values
+
+        // player 1 has won
+        if (victory == 1) {
+            player1_reward = 1;
+            player2_reward = -1;
+        }
+        else if (victory == 2) {
+            player1_reward = -1;
+            player2_reward = 1;
+        }
+        else { // if draw has occurred
+            return;
+        }
+
 
     }
 
@@ -113,5 +153,31 @@ private:
         }
     }
 
+    string goBackOneMove(string state, pair<int, int> last_move) {
+        // Calculate the index directly from the pair
+        // last_move.first is the row, last_move.second is the column
+        int index = last_move.first * 3 + last_move.second;
+
+        // Optional: Check if the index is valid before modifying the string
+        if (index >= 0 && index < state.length()) {
+            state[index] = 'a';
+        }
+        else {
+            cout << "error in state length or index" << endl;
+        }
+
+        return state;
+    }
+
+    /*string convertGridtoString(vector<vector<int>> grid) {
+        string curr_board;
+        for (int j = 0; j < 3; j++) {
+            for (int i = 0; i < 3; i++) {
+                curr_board.push_back('a' + grid[j][i]);
+            }
+        }
+
+        return curr_board;
+    }*/
 };
 

@@ -16,7 +16,7 @@ public:
 
     Board() : grid(3, vector<int>(3,0)), move(0) {};
 
-    //checks if game has ended; 0 = draw, 1 = player 1 has won, 2 = player 2 has won
+    //checks if game has ended; 0 = not ended, 1 = player 1 has won, 2 = player 2 has won, 3 = draw
     int checkGameEnded() {
         if (grid[0][0] != 0) {
             if (grid[0][0] == grid[0][1] && grid[0][1] == grid[0][2]) {
@@ -49,8 +49,9 @@ public:
 
         //check for draw
         if (episode_history.size() == 9) {
-            return 0;
+            return 3;
         }
+        return 0;
     }
 
     string getBoardState() {
@@ -79,7 +80,24 @@ public:
         move++;
     }
 
+    void displayBoard() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                int pos_state = grid[i][j];
+                if (pos_state == 0) {
+                    cout << '-';
+                }
+                else if (pos_state == 1) {
+                    cout << 'X';
+                }
+                else if (pos_state == 2) {
+                    cout << 'O';
+                }
+            }
+            cout << endl;
+        }
 
+    }
 
 
 };
