@@ -1,30 +1,59 @@
 //
 // Created by Vinay Reddy Ratnam on 6/3/25.
 //
-#include "player.h"
-#include "board.h"
+#include "Players.h"
+#include "Board.h"
 #include <iostream>
 using namespace std;
 
 
 int main() {
-    int choice;
-    cout << "Please choose what you would like to do. Enter an integer value:" << endl;
-    cout << "1. Train bots using Monte Carlo Simulations" << endl;
-    cout << "2. Train bots using Q-Learning" << endl;
-    cout << "3. Play against bot as Xs" << endl;
-    cout << "4. Play against bot as Os" << endl;
+    while (true) {
+        int choice;
+        cout << "Please choose what you would like to do. Enter an integer value:" << endl;
+        cout << "1. Train bots using Monte Carlo Simulations" << endl;
+        cout << "2. Train bots using Q-Learning" << endl;
+        cout << "3. Play against bot as Xs" << endl;
+        cout << "4. Play against bot as Os" << endl;
+        cout << "5. End Program" << endl;
 
-    cin >> choice;
+        cin >> choice;
 
-    switch (choice) {
-        case 1:
+        if (choice == 1) {
 
-        case 2:
+        }
+        else if (choice == 2) {
 
-        case 3:
+        }
+        else if (choice == 3) {
 
-        case 4:
+        }
+        else if (choice == 4) {
 
+        }
+        else {
+            return 0;
+        }
     }
+
 };
+
+void trainingMC() {
+    Players Bots();
+    int training_length;
+
+    cout << "For how many games do you want to train the bot?" << endl;
+    cin >> training_length;
+
+    for (int curr_traj = 0; curr_traj < training_length; curr_traj++) {
+        Board currBoard();
+
+        bool game_goes_on = true;
+        while (game_goes_on) {
+            string curr_state = currBoard.getBoardState();
+            pair<int,int> bots_action = Bots.makeMoveMC(curr_state);
+            currBoard.playerAction(bots_action);
+
+        }
+    }
+}

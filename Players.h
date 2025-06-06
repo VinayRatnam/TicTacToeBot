@@ -10,19 +10,19 @@
 #include <set>
 #include <algorithm>
 #include <random>
+#include <iostream>
 using namespace std;
 
 class Players {
 public:
     map<string, map<int, float>> action_values;
     map<string, map<int, float>> policies;
-    default_random_engine generator(12345); //Using a fixed seed
-    uniform_real_distribution<float> distribution(0.0, 1.0);
+    default_random_engine generator;
+    uniform_real_distribution<float> distribution;
 
-    int move = 0;
     vector<int> rewards {-1,0,-1};
 
-    Player() { //default constructor should initialize states for training
+    Players() : generator(12345), distribution(0.0f,1.0f) { //default constructor should initialize states for training
         // create states
         pair<string, pair<int, int>> initial_state {"", {0,0}};
         createStates(initial_state);
@@ -49,6 +49,8 @@ public:
                 return {2,1};
             case 8:
                 return {2,2};
+            default:
+                return {-1,-1};
         }
     }
 
@@ -65,6 +67,8 @@ public:
                 return convertToBoardSpot(iter->first);
             }
         }
+        auto iter2 = policy.crbegin();
+        return convertToBoardSpot(iter2->first);
 
     }
 
@@ -99,10 +103,10 @@ private:
         }
 
         else {
-            if (curr_state->second.first < 5) {
+            if (curr_state.second.first < 5) {
                 createStates({curr_state.first + 'b', {curr_state.second.first+1, curr_state.second.second}});
             }
-            if (curr_state->second->second < 4) {
+            if (curr_state.second.second < 4) {
                 createStates({curr_state.first + 'c', {curr_state.second.first, curr_state.second.second+1}});
             }
             createStates({curr_state.first + 'a', curr_state.second});
@@ -111,13 +115,3 @@ private:
 
 };
 
-class Player1 : public Player {
-public:
-
-
-
-};
-
-class Player2 : public Player {
-
-};

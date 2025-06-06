@@ -4,30 +4,17 @@
 #pragma once
 #include <vector>
 #include <utility>
+#include <iostream>
 using namespace std;
 
 
 class Board {
 public:
-    vector<vector<int>> grid(3, vector<int>(3,0)); // 3x3 grid
+    vector<vector<int>> grid; // 3x3 grid
     vector<pair<int, int>> episode_history; //contains data from game; moves that were made
+    int move;
 
-    Board() {};
-private:
-
-    // Changes board based on player action
-    void playerAction(int player, pair<int,int> pos) {
-        if (player == 1) {
-            grid[pos.first][pos.second] = 1;
-        }
-
-        if (player == 2) {
-            grid[pos.first][pos.second] = 2;
-        }
-
-        // update episode history
-        episode_history.push_back(<pos.first, pos.second>);
-    }
+    Board() : grid(3, vector<int>(3,0)), move(0) {};
 
     //checks if game has ended; 0 = draw, 1 = player 1 has won, 2 = player 2 has won
     int checkGameEnded() {
@@ -66,6 +53,34 @@ private:
         }
     }
 
-    """Add deconstructor if loop is not used"""
+    string getBoardState() {
+        string curr_board;
+        for (int j = 0; j < 3; j++) {
+            for (int i = 0; i < 3; i++) {
+                curr_board.push_back('a' + grid[j][i]);
+            }
+        }
+
+        return curr_board;
+    }
+
+    // Changes board based on player action
+    void playerAction(pair<int,int> pos) {
+        if (move % 2 == 0) {
+            grid[pos.first][pos.second] = 1;
+        }
+
+        else {
+            grid[pos.first][pos.second] = 2;
+        }
+
+        // update episode history
+        episode_history.push_back({pos.first, pos.second});
+        move++;
+    }
+
+
+
+
 };
 
