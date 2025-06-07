@@ -11,7 +11,6 @@ using namespace std;
 class Board {
 public:
     vector<vector<int>> grid; // 3x3 grid
-    vector<pair<int, int>> episode_history; //contains data from game; moves that were made
     int move;
 
     Board() : grid(3, vector<int>(3,0)), move(0) {};
@@ -99,6 +98,12 @@ public:
 
     }
 
+    vector<pair<int, int>> getEpisodeHistory() {
+        return episode_history;
+    }
+
+private:
+    vector<pair<int, int>> episode_history; //contains data from game; moves that were made
 
 };
 

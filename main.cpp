@@ -4,13 +4,16 @@
 #include "Players.h"
 #include "Board.h"
 #include <iostream>
-#include <random>
 #include <vector>
 #include <utility>
 using namespace std;
 
 
+void trainingMC(Players &Bots);
+
 int main() {
+    Players Bots; // initialize the bots
+
     while (true) {
         int choice;
         cout << "Please choose what you would like to do. Enter an integer value:" << endl;
@@ -19,12 +22,10 @@ int main() {
         cout << "3. Play against bot as Xs" << endl;
         cout << "4. Play against bot as Os" << endl;
         cout << "5. End Program" << endl;
-        cout << "6. Display Board Test" << endl;
 
         cin >> choice;
-
         if (choice == 1) {
-
+            trainingMC(Bots);
         }
         else if (choice == 2) {
 
@@ -35,10 +36,6 @@ int main() {
         else if (choice == 4) {
 
         }
-        else if (choice == 6) {
-            Board currBoard;
-            currBoard.displayBoard();
-        }
         else {
             return 0;
         }
@@ -46,8 +43,7 @@ int main() {
 
 };
 
-void trainingMC() {
-    Players Bots;
+void trainingMC(Players &Bots) {
     int training_length;
 
     cout << "For how many games do you want to train the bot?" << endl;
@@ -70,14 +66,14 @@ void trainingMC() {
             if (victory != 0) {
                 game_goes_on = false;
 
-                // change action-values if game has ended
+                // change action-values & policy if game has ended
                 string end_board = currBoard.getBoardState();
-                vector<pair<int,int>> hist = currBoard.episode_history;
+                vector<pair<int,int>> hist = currBoard.getEpisodeHistory();
                 int num_moves = currBoard.move;
                 Bots.changeStates(hist, end_board, victory, num_moves);
             }
-
-
         }
     }
+
+    // after training is completed, store weights in .csv file
 }

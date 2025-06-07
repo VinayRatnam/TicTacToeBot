@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <random>
 #include <iostream>
+#include <cmath>
 using namespace std;
 
 class Players {
@@ -127,10 +128,13 @@ public:
                 player1_return *= gamma;
             }
 
+            //adjust policy using softmax
+            softMax(curr_grid);
+
             num_moves--;
         }
 
-        //adjust policy using softmax
+
 
 
     }
@@ -202,5 +206,28 @@ private:
 
         return curr_board;
     }*/
+
+    void softMax(string curr_grid) {
+        // first find max action value
+        const map<int, float> &curr_action_values = action_values[curr_grid];
+
+        float max_val = -999.f; // set max_val initially to a very low number
+
+        for (auto iter = curr_action_values.begin(); iter != curr_action_values.end(); iter++) {
+            if (max_val < iter->second) {
+                max_val = iter->second;
+            }
+        }
+
+        float sum_exp = 0;
+        for (auto iter2 = curr_action_values.begin(); iter2 != curr_action_values.end(); iter2++) {
+            sum_exp += exp(iter2->second - max_val);
+        }
+
+        // calculate probabilities with softmax now and change policy
+        for (auto iter2 = curr_action_values.begin(); iter2 != curr_action_values.end(); iter2++) {
+            policies[curr_grid][iter2->first] = exp(iter2->second - max_val) / sum_exp;
+        }
+    }
 };
 
