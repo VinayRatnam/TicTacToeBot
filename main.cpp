@@ -73,7 +73,8 @@ void trainingMC() {
                 // change action-values if game has ended
                 string end_board = currBoard.getBoardState();
                 vector<pair<int,int>> hist = currBoard.episode_history;
-                Bots.changeStates(hist, end_board, victory);
+                int num_moves = currBoard.move;
+                Bots.changeStates(hist, end_board, victory, num_moves);
             }
 
 

@@ -90,24 +90,47 @@ public:
     }
 
 
-    void changeStates(vector<pair<int, int>> &episode_history, string &grid_string, int victory) {
-        int player1_reward;
-        int player2_reward;
+    void changeStates(vector<pair<int, int>> &episode_history, string &grid_string, int victory, int &num_moves) {
+        int player1_return;
+        int player2_return;
 
         // iterate backwards through moves and adjust action-values
 
         // player 1 has won
         if (victory == 1) {
-            player1_reward = 1;
-            player2_reward = -1;
+            player1_return = 1;
+            player2_return = -1;
         }
         else if (victory == 2) {
-            player1_reward = -1;
-            player2_reward = 1;
+            player1_return = -1;
+            player2_return = 1;
         }
         else { // if draw has occurred
-            return;
+            player1_return = 0;
+            player2_return = 0;
         }
+
+        string curr_grid = grid_string;
+        float gamma = 0.9f; //standard for calculating return
+        float alpha = 0.1f; //standard for adjusting action-value functions
+        while (num_moves > 0) {
+            curr_grid = goBackOneMove(curr_grid, episode_history[num_moves - 1]);
+            int action = episode_history[num_moves-1].first * 3 + episode_history[num_moves-1].second;
+
+            // change action-value function
+            if (num_moves % 2 == 0) {
+                action_values[curr_grid][action] += alpha * (player2_return - action_values[curr_grid][action]);
+                player2_return *= gamma;
+            }
+            else {
+                action_values[curr_grid][action] += alpha * (player1_return - action_values[curr_grid][action]);
+                player1_return *= gamma;
+            }
+
+            num_moves--;
+        }
+
+        //adjust policy using softmax
 
 
     }
