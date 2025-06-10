@@ -9,11 +9,17 @@ using namespace std;
 
 
 class Board {
-public:
+private:
     vector<vector<int>> grid; // 3x3 grid
+    vector<pair<int, int>> episode_history; //contains data from game; moves that were made
     int move;
 
+public:
     Board() : grid(3, vector<int>(3,0)), move(0) {};
+
+    int getMove() {
+        return move;
+    }
 
     //checks if game has ended; 0 = not ended, 1 = player 1 has won, 2 = player 2 has won, 3 = draw
     int checkGameEnded() {
@@ -28,7 +34,7 @@ public:
                 return grid[0][0];
             }
         }
-        if (grid[0][1] != 0 && grid[0][1] == grid[1][1] && grid[2][1]) {
+        if (grid[0][1] != 0 && grid[0][1] == grid[1][1] && grid[1][1] == grid[2][1]) {
             return grid[0][1];
         }
         if (grid[0][2] != 0) {
@@ -101,9 +107,6 @@ public:
     vector<pair<int, int>> getEpisodeHistory() {
         return episode_history;
     }
-
-private:
-    vector<pair<int, int>> episode_history; //contains data from game; moves that were made
 
 };
 
