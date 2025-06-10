@@ -30,21 +30,6 @@ public:
         uniform_policy = policies;
     }
 
-    pair<int,int> convertToBoardSpot(int val) {
-        switch (val) {
-            case 0: return {0,0};
-            case 1: return {0,1};
-            case 2: return {0,2};
-            case 3: return {1,0};
-            case 4: return {1,1};
-            case 5: return {1,2};
-            case 6: return {2,0};
-            case 7: return {2,1};
-            case 8: return {2,2};
-            default: return {-1,-1};
-        }
-    }
-
     pair<int,int> makeMoveMC(const string& curr_state, float epsilon) {
         map<int, float> policy;
         if (distribution(generator) < epsilon) {
@@ -53,17 +38,8 @@ public:
             policy = policies[curr_state];
         }
 
-        float decision = distribution(generator);
-        float curr_prob = 0.0;
-        for (auto const& [action, prob] : policy) {
-            curr_prob += prob;
-            if (decision <= curr_prob) {
-                return convertToBoardSpot(action);
-            }
-        }
-        if (!policy.empty()) {
-            return convertToBoardSpot(policy.rbegin()->first);
-        }
+        int action = selectMove(policy);
+        return convertToBoardSpot(action);
         return {-1, -1};
     }
 
@@ -108,6 +84,34 @@ public:
             updatePolicyForState(state_to_update);
         }
     }
+
+    /**
+     * @brief Bot decides on a move based on greatest action_value in current state
+     * @param curr_state is the string holding the current state of the board
+     * @return <row, col> of the move that the bot wants to make. If uniform dist.
+     * generates number below epsilon, use a random move generated from uniform_policy.
+     */
+    pair<int, int> makeMoveQLearning(string curr_state, float epsilon) {
+        if (distribution(generator) < epsilon) {
+            // make random move based on uniform_policy
+            map<int, float> curr_uniform_pol = uniform_policy[curr_state];
+            int action = selectMove(curr_uniform_pol);
+            return convertToBoardSpot(action);
+        }
+        else {
+            // make move with highest action-value
+            map<int, float> curr_action_vals = action_values[curr_state];
+            auto max = curr_action_vals.begin();
+            for (auto iter = ++curr_action_vals.begin(); iter != curr_action_vals.end(); iter++) {
+                if (iter->second > max->second) {
+                    max = iter;
+                }
+            }
+
+            return convertToBoardSpot(max->first);
+        }
+
+    };
 
     /**
      * @brief Function creates a csv of bot's policies for all states
@@ -159,12 +163,44 @@ private:
         }
     }
 
+    pair<int,int> convertToBoardSpot(int val) {
+        switch (val) {
+            case 0: return {0,0};
+            case 1: return {0,1};
+            case 2: return {0,2};
+            case 3: return {1,0};
+            case 4: return {1,1};
+            case 5: return {1,2};
+            case 6: return {2,0};
+            case 7: return {2,1};
+            case 8: return {2,2};
+            default: return {-1,-1};
+        }
+    }
+
     string goBackOneMove(string state, pair<int, int> last_move) {
         int index = last_move.first * 3 + last_move.second;
         if (index >= 0 && index < state.length()) {
             state[index] = 'a';
         }
         return state;
+    }
+
+    /**
+     * @brief Selects an action based on a given probability distribution (policy).
+     * @param pol is a reference to the given probability distribution
+     * @return An integer representing the chosen action, or -1 if the policy is empty.
+     */
+    int selectMove(const map<int, float>& pol) {
+        float choice = distribution(generator);
+        float sum_probs = 0;
+        for (auto iter = pol.begin(); iter != pol.end(); iter++) {
+            sum_probs += iter->second;
+            if (choice < sum_probs) {
+                return iter->first;
+            }
+        }
+        return pol.rbegin()->first; // return last action just in case nothing returns
     }
 
     // Using the "pure function" approach for calculating softmax is cleaner

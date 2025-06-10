@@ -23,6 +23,7 @@ using namespace std;
 
 // Declare Monte Carlo training function
 void trainingMC(Players &Bots);
+void trainingQLearning(Players &Bots);
 
 /**
  * @brief Entry point for program. Presents a menu that gives options to either
@@ -61,7 +62,7 @@ int main() {
         }
 
         else if (choice == 2) {
-            cout << "Q-Learning is not yet implemented." << endl;
+            trainingQLearning(Bots);
         }
 
         else if (choice == 3) {
@@ -191,7 +192,7 @@ void trainingMC(Players &Bots) {
     // Training_length is chosen by the User
     int training_length;
 
-    cout << "For how many games do you want to train the bot? ";
+    cout << "For how many games do you want to train the bot?" << endl;
     cin >> training_length;
 
 
@@ -242,5 +243,34 @@ void trainingMC(Players &Bots) {
     }
     else {
         return;
+    }
+}
+
+/**
+ * @brief Trains bots using Q-Learning.
+ * Asks user for a number of iterations to train the bot. Uses an epsilon-greedy method
+ * where as bot gets more experience (has gone through more episodes), it chooses the
+ * action with the highest action-value function. Temporal differences are used to train
+ * the bot, so it will change action-value function for the action it chooses at its
+ * previous state while the game continues. Policy is not used in Q-Learning.
+ *
+ * @param Bots: Action-Value Functions are stored within Bots; they will be updated during
+ * training
+ */
+void trainingQLearning(Players &Bots) {
+    int episodes = 0;
+    cout << "For how many games do you want to train the bot?" << endl;
+    cin >> episodes;
+
+    for (int episode = 0; episode < episodes; episode++) {
+        // initialize a board for each trajectory
+        Board currBoard;
+        float epsilon = 1 - (static_cast<float>(episode) / episodes);
+
+        // game runs as long as no one has won (or no draw)
+        while(currBoard.checkGameEnded() == 0) {
+            string curr_state = currBoard.getBoardState();
+
+        }
     }
 }
