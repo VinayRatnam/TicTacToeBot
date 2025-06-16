@@ -1,4 +1,4 @@
-# Creating a Tic-Tac-Toe Bot using Reinforment Learning (RL)
+# Creating a Tic-Tac-Toe Bot using Reinforcment Learning (RL)
 In this project, a Player 1 Tic-Tac-Toe Bot and Player 2 Tic-Tac-Toe bot will be created using Monte Carlo (MC) Simulations and Q-Learning for both of them. <br>
 The objective is to get a better understanding of why Q-Learning works much faster than MC during training and show this increase in sample efficiency through graphs at the end.
 
