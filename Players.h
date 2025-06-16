@@ -114,6 +114,70 @@ public:
     };
 
     /**
+     * @brief Calculate new action-value by using next state's best action-value
+     * and readjusting current_state;
+     * @param new_state This is the state chosen by the bot; we need the max q-value
+     * of this state to perform the Q-Learning.
+     * @param episode_hist Use this to perform readjustments on previous state-actions
+     */
+    void adjustActionValue(string& new_state, vector<pair<int,int>> episode_hist) {
+        // create logic for adjusting action-values for game continuing moves
+        // go back two moves to find which state to change action-values for:
+        if (episode_hist.size() < 2) {
+            cout << "Not enough actions to do training" << endl;
+            return;
+        }
+
+        string prev_state = goBackOneMove(new_state, episode_hist[episode_hist.size()-1]);
+        prev_state = goBackOneMove(prev_state, episode_hist[episode_hist.size()-2]);
+        int move = episode_hist[episode_hist.size()-2].first * 3 + episode_hist[episode_hist.size()-2].second;
+
+        float gamma = 0.9;
+        float alpha = 0.1;
+
+        // find max action-value for new_state
+        float best_val = action_values[new_state].begin()->second;
+        for (auto iter = action_values[new_state].begin(); iter != action_values[new_state].end(); iter++) {
+            best_val = max(best_val, iter->second);
+        }
+
+        action_values[prev_state][move] += alpha * (gamma * best_val - action_values[prev_state][move]);
+    }
+
+    /**
+     * @brief Adjusts the action-values for the last two board states that leads to game's end
+     *
+     * @param end_state This is the board after the game has ended
+     * @param episode_hist History of the game so we can adjust previous action-values
+     * @param game_end Determines who gets what reward
+     */
+    void adjustTerminalActionVals(string& end_state, vector<pair<int,int>> episode_hist, int game_end) {
+        int last_move_returns = 0;
+        int second_last_move_returns = 0;
+        float alpha = 0.5; // set higher because we found winning/losing move; train it quickly on this
+
+        // adjust weights according to how game ended
+        if (game_end != 3) {
+            last_move_returns = 10;
+            second_last_move_returns = -10;
+        }
+
+        // first adjust for X
+        string prev_state = goBackOneMove(end_state, episode_hist[episode_hist.size()-1]);
+        int prev_move = episode_hist[episode_hist.size()-1].first * 3 + episode_hist[episode_hist.size()-1].second;
+        action_values[prev_state][prev_move] += alpha * (last_move_returns - action_values[prev_state][prev_move]);
+
+        // now adjust for O
+        prev_state = goBackOneMove(prev_state, episode_hist[episode_hist.size()-2]);
+        prev_move = episode_hist[episode_hist.size()-2].first * 3 + episode_hist[episode_hist.size()-2].second;
+        action_values[prev_state][prev_move] += alpha * (second_last_move_returns - action_values[prev_state][prev_move]);
+
+
+    }
+
+
+
+    /**
      * @brief Function creates a csv of bot's policies for all states
      *
      * @format (Long/Tidy Format) The csv's format for each line will be:

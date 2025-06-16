@@ -117,24 +117,24 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named MyGameProject
+# Target rules for targets named tictactoe_bot
 
 # Build rule for target.
-MyGameProject: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 MyGameProject
-.PHONY : MyGameProject
+tictactoe_bot: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 tictactoe_bot
+.PHONY : tictactoe_bot
 
 # fast build rule for target.
-MyGameProject/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MyGameProject.dir/build.make CMakeFiles/MyGameProject.dir/build
-.PHONY : MyGameProject/fast
+tictactoe_bot/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tictactoe_bot.dir/build.make CMakeFiles/tictactoe_bot.dir/build
+.PHONY : tictactoe_bot/fast
 
 main.o: main.cpp.o
 .PHONY : main.o
 
 # target to build an object file
 main.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MyGameProject.dir/build.make CMakeFiles/MyGameProject.dir/main.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tictactoe_bot.dir/build.make CMakeFiles/tictactoe_bot.dir/main.cpp.o
 .PHONY : main.cpp.o
 
 main.i: main.cpp.i
@@ -142,7 +142,7 @@ main.i: main.cpp.i
 
 # target to preprocess a source file
 main.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MyGameProject.dir/build.make CMakeFiles/MyGameProject.dir/main.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tictactoe_bot.dir/build.make CMakeFiles/tictactoe_bot.dir/main.cpp.i
 .PHONY : main.cpp.i
 
 main.s: main.cpp.s
@@ -150,7 +150,7 @@ main.s: main.cpp.s
 
 # target to generate assembly for a file
 main.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MyGameProject.dir/build.make CMakeFiles/MyGameProject.dir/main.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tictactoe_bot.dir/build.make CMakeFiles/tictactoe_bot.dir/main.cpp.s
 .PHONY : main.cpp.s
 
 # Help Target
@@ -161,7 +161,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... MyGameProject"
+	@echo "... tictactoe_bot"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

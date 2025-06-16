@@ -128,7 +128,7 @@ CMAKE_PROJECT_DESCRIPTION:STATIC=
 CMAKE_PROJECT_HOMEPAGE_URL:STATIC=
 
 //Value Computed by CMake
-CMAKE_PROJECT_NAME:STATIC=MyGameProject
+CMAKE_PROJECT_NAME:STATIC=TicTacToeBot
 
 //Path to a program.
 CMAKE_RANLIB:FILEPATH=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib
@@ -203,6 +203,15 @@ MyGameProject_IS_TOP_LEVEL:STATIC=ON
 
 //Value Computed by CMake
 MyGameProject_SOURCE_DIR:STATIC=/Users/vinayreddyratnam/TicTacToeBot
+
+//Value Computed by CMake
+TicTacToeBot_BINARY_DIR:STATIC=/Users/vinayreddyratnam/TicTacToeBot/build
+
+//Value Computed by CMake
+TicTacToeBot_IS_TOP_LEVEL:STATIC=ON
+
+//Value Computed by CMake
+TicTacToeBot_SOURCE_DIR:STATIC=/Users/vinayreddyratnam/TicTacToeBot
 
 
 ########################

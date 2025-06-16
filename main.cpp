@@ -40,7 +40,7 @@ int main() {
         int choice;
         cout << "--- Tic-Tac-Toe AI ---" << endl;
         cout << "1. Train bots using Monte Carlo Simulations" << endl;
-        cout << "2. Train bots using Q-Learning (Not Implemented)" << endl;
+        cout << "2. Train bots using Q-Learning" << endl;
         cout << "3. Play against bot as Xs (Player 1)" << endl;
         cout << "4. Play against bot as Os (Player 2)" << endl;
         cout << "5. End Program" << endl;
@@ -69,6 +69,18 @@ int main() {
             // Creates Tic-Tac-Toe game with User being Player 1
             Board currBoard;
 
+            // set up which type of bot user is playing against
+            bool bot_type; // false for MC, true for Q Learning
+            string str_bot_type;
+            cout << "Please select which type of bot to play against (1. Monte Carlo 2. Q-Learning): ";
+            cin >> str_bot_type;
+            if (stoi(str_bot_type) == 1) {
+                bot_type = false;
+            }
+            else {
+                bot_type = true;
+            }
+
             // loop runs as long as game has not ended
             while (currBoard.checkGameEnded() == 0) {
 
@@ -94,7 +106,14 @@ int main() {
 
                 string curr_state = currBoard.getBoardState();
                 float eps = 0.0f; // Epsilon = 0 for deterministic play
-                pair<int, int> bots_action = Bots.makeMoveMC(curr_state, eps);
+                pair<int,int> bots_action;
+                if (bot_type) {
+                    bots_action = Bots.makeMoveQLearning(curr_state, eps);
+                }
+                else {
+                    bots_action = Bots.makeMoveMC(curr_state, eps);
+                }
+
 
                 // Check if the bot returned a valid move
                 if (bots_action.first == -1) {
@@ -120,12 +139,30 @@ int main() {
             Board currBoard;
             bool game_on = true;
 
+            // set up which type of bot user is playing against
+            bool bot_type; // false for MC, true for Q Learning
+            string str_bot_type;
+            cout << "Please select which type of bot to play against (1. Monte Carlo 2. Q-Learning): ";
+            cin >> str_bot_type;
+            if (stoi(str_bot_type) == 1) {
+                bot_type = false;
+            }
+            else {
+                bot_type = true;
+            }
+
             while (game_on) {
                 // --- BOT'S TURN ---
                 cout << "\nBot is making a move..." << endl;
                 string curr_state = currBoard.getBoardState();
                 float eps = 0.0f; // Epsilon = 0 for deterministic play
-                pair<int, int> bots_action = Bots.makeMoveMC(curr_state, eps);
+                pair<int, int> bots_action;
+                if (bot_type) {
+                    bots_action = Bots.makeMoveQLearning(curr_state, eps);
+                }
+                else {
+                    bots_action = Bots.makeMoveMC(curr_state, eps);
+                }
 
                 if (bots_action.first == -1) {
                     cout << "Bot doesn't know how to respond to this state and forfeits." << endl;
@@ -266,11 +303,30 @@ void trainingQLearning(Players &Bots) {
         // initialize a board for each trajectory
         Board currBoard;
         float epsilon = 1 - (static_cast<float>(episode) / episodes);
+        int game_ended = 0;
+
+
+        // have both bots make one move each to start training
+        string curr_state = currBoard.getBoardState();
+        pair<int, int> curr_move = Bots.makeMoveQLearning(curr_state, epsilon);
+        currBoard.playerAction(curr_move);
+        curr_state = currBoard.getBoardState();
+        curr_move = Bots.makeMoveQLearning(curr_state, epsilon);
+        currBoard.playerAction(curr_move);
 
         // game runs as long as no one has won (or no draw)
-        while(currBoard.checkGameEnded() == 0) {
-            string curr_state = currBoard.getBoardState();
+        while(game_ended == 0) {
+            // only calculate new action-values if game has not ended
+            vector<pair<int, int>> episode_hist = currBoard.getEpisodeHistory();
+            Bots.adjustActionValue(curr_state, episode_hist);
 
+            curr_move = Bots.makeMoveQLearning(curr_state, epsilon);
+            currBoard.playerAction(curr_move);
+            curr_state = currBoard.getBoardState();
+            game_ended = currBoard.checkGameEnded();
         }
+
+        // calculate action-values when game has ended
+        Bots.adjustTerminalActionVals(curr_state, currBoard.getEpisodeHistory(), game_ended);
     }
 }

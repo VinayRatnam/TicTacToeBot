@@ -63,7 +63,7 @@ CMAKE_BINARY_DIR = /Users/vinayreddyratnam/TicTacToeBot/build
 # Directory level rules for the build root directory
 
 # The main recursive "all" target.
-all: CMakeFiles/MyGameProject.dir/all
+all: CMakeFiles/tictactoe_bot.dir/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
@@ -71,34 +71,34 @@ preinstall:
 .PHONY : preinstall
 
 # The main recursive "clean" target.
-clean: CMakeFiles/MyGameProject.dir/clean
+clean: CMakeFiles/tictactoe_bot.dir/clean
 .PHONY : clean
 
 #=============================================================================
-# Target rules for target CMakeFiles/MyGameProject.dir
+# Target rules for target CMakeFiles/tictactoe_bot.dir
 
 # All Build rule for target.
-CMakeFiles/MyGameProject.dir/all:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MyGameProject.dir/build.make CMakeFiles/MyGameProject.dir/depend
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MyGameProject.dir/build.make CMakeFiles/MyGameProject.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/vinayreddyratnam/TicTacToeBot/build/CMakeFiles --progress-num=1,2 "Built target MyGameProject"
-.PHONY : CMakeFiles/MyGameProject.dir/all
+CMakeFiles/tictactoe_bot.dir/all:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tictactoe_bot.dir/build.make CMakeFiles/tictactoe_bot.dir/depend
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tictactoe_bot.dir/build.make CMakeFiles/tictactoe_bot.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/vinayreddyratnam/TicTacToeBot/build/CMakeFiles --progress-num=1,2 "Built target tictactoe_bot"
+.PHONY : CMakeFiles/tictactoe_bot.dir/all
 
 # Build rule for subdir invocation for target.
-CMakeFiles/MyGameProject.dir/rule: cmake_check_build_system
+CMakeFiles/tictactoe_bot.dir/rule: cmake_check_build_system
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/vinayreddyratnam/TicTacToeBot/build/CMakeFiles 2
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/MyGameProject.dir/all
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CMakeFiles/tictactoe_bot.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/vinayreddyratnam/TicTacToeBot/build/CMakeFiles 0
-.PHONY : CMakeFiles/MyGameProject.dir/rule
+.PHONY : CMakeFiles/tictactoe_bot.dir/rule
 
 # Convenience name for target.
-MyGameProject: CMakeFiles/MyGameProject.dir/rule
-.PHONY : MyGameProject
+tictactoe_bot: CMakeFiles/tictactoe_bot.dir/rule
+.PHONY : tictactoe_bot
 
 # clean rule for target.
-CMakeFiles/MyGameProject.dir/clean:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/MyGameProject.dir/build.make CMakeFiles/MyGameProject.dir/clean
-.PHONY : CMakeFiles/MyGameProject.dir/clean
+CMakeFiles/tictactoe_bot.dir/clean:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/tictactoe_bot.dir/build.make CMakeFiles/tictactoe_bot.dir/clean
+.PHONY : CMakeFiles/tictactoe_bot.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.
