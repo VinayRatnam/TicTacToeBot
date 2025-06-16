@@ -1,4 +1,4 @@
-CMakeFiles/MyGameProject.dir/main.cpp.o: \
+CMakeFiles/tictactoe_bot.dir/main.cpp.o: \
   /Users/vinayreddyratnam/TicTacToeBot/main.cpp \
   /Users/vinayreddyratnam/TicTacToeBot/Players.h \
   /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk/usr/include/c++/v1/vector \

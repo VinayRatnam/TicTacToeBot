@@ -1,3 +1,3 @@
-/Users/vinayreddyratnam/TicTacToeBot/build/CMakeFiles/MyGameProject.dir
+/Users/vinayreddyratnam/TicTacToeBot/build/CMakeFiles/tictactoe_bot.dir
 /Users/vinayreddyratnam/TicTacToeBot/build/CMakeFiles/edit_cache.dir
 /Users/vinayreddyratnam/TicTacToeBot/build/CMakeFiles/rebuild_cache.dir

@@ -23,6 +23,7 @@ using namespace std;
 
 // Declare Monte Carlo training function
 void trainingMC(Players &Bots);
+void trainingQLearning(Players &Bots);
 
 /**
  * @brief Entry point for program. Presents a menu that gives options to either
@@ -39,7 +40,7 @@ int main() {
         int choice;
         cout << "--- Tic-Tac-Toe AI ---" << endl;
         cout << "1. Train bots using Monte Carlo Simulations" << endl;
-        cout << "2. Train bots using Q-Learning (Not Implemented)" << endl;
+        cout << "2. Train bots using Q-Learning" << endl;
         cout << "3. Play against bot as Xs (Player 1)" << endl;
         cout << "4. Play against bot as Os (Player 2)" << endl;
         cout << "5. End Program" << endl;
@@ -61,12 +62,24 @@ int main() {
         }
 
         else if (choice == 2) {
-            cout << "Q-Learning is not yet implemented." << endl;
+            trainingQLearning(Bots);
         }
 
         else if (choice == 3) {
             // Creates Tic-Tac-Toe game with User being Player 1
             Board currBoard;
+
+            // set up which type of bot user is playing against
+            bool bot_type; // false for MC, true for Q Learning
+            string str_bot_type;
+            cout << "Please select which type of bot to play against (1. Monte Carlo 2. Q-Learning): ";
+            cin >> str_bot_type;
+            if (stoi(str_bot_type) == 1) {
+                bot_type = false;
+            }
+            else {
+                bot_type = true;
+            }
 
             // loop runs as long as game has not ended
             while (currBoard.checkGameEnded() == 0) {
@@ -93,7 +106,14 @@ int main() {
 
                 string curr_state = currBoard.getBoardState();
                 float eps = 0.0f; // Epsilon = 0 for deterministic play
-                pair<int, int> bots_action = Bots.makeMoveMC(curr_state, eps);
+                pair<int,int> bots_action;
+                if (bot_type) {
+                    bots_action = Bots.makeMoveQLearning(curr_state, eps);
+                }
+                else {
+                    bots_action = Bots.makeMoveMC(curr_state, eps);
+                }
+
 
                 // Check if the bot returned a valid move
                 if (bots_action.first == -1) {
@@ -119,12 +139,30 @@ int main() {
             Board currBoard;
             bool game_on = true;
 
+            // set up which type of bot user is playing against
+            bool bot_type; // false for MC, true for Q Learning
+            string str_bot_type;
+            cout << "Please select which type of bot to play against (1. Monte Carlo 2. Q-Learning): ";
+            cin >> str_bot_type;
+            if (stoi(str_bot_type) == 1) {
+                bot_type = false;
+            }
+            else {
+                bot_type = true;
+            }
+
             while (game_on) {
                 // --- BOT'S TURN ---
                 cout << "\nBot is making a move..." << endl;
                 string curr_state = currBoard.getBoardState();
                 float eps = 0.0f; // Epsilon = 0 for deterministic play
-                pair<int, int> bots_action = Bots.makeMoveMC(curr_state, eps);
+                pair<int, int> bots_action;
+                if (bot_type) {
+                    bots_action = Bots.makeMoveQLearning(curr_state, eps);
+                }
+                else {
+                    bots_action = Bots.makeMoveMC(curr_state, eps);
+                }
 
                 if (bots_action.first == -1) {
                     cout << "Bot doesn't know how to respond to this state and forfeits." << endl;
@@ -191,7 +229,7 @@ void trainingMC(Players &Bots) {
     // Training_length is chosen by the User
     int training_length;
 
-    cout << "For how many games do you want to train the bot? ";
+    cout << "For how many games do you want to train the bot?" << endl;
     cin >> training_length;
 
 
@@ -242,5 +280,53 @@ void trainingMC(Players &Bots) {
     }
     else {
         return;
+    }
+}
+
+/**
+ * @brief Trains bots using Q-Learning.
+ * Asks user for a number of iterations to train the bot. Uses an epsilon-greedy method
+ * where as bot gets more experience (has gone through more episodes), it chooses the
+ * action with the highest action-value function. Temporal differences are used to train
+ * the bot, so it will change action-value function for the action it chooses at its
+ * previous state while the game continues. Policy is not used in Q-Learning.
+ *
+ * @param Bots: Action-Value Functions are stored within Bots; they will be updated during
+ * training
+ */
+void trainingQLearning(Players &Bots) {
+    int episodes = 0;
+    cout << "For how many games do you want to train the bot?" << endl;
+    cin >> episodes;
+
+    for (int episode = 0; episode < episodes; episode++) {
+        // initialize a board for each trajectory
+        Board currBoard;
+        float epsilon = 1 - (static_cast<float>(episode) / episodes);
+        int game_ended = 0;
+
+
+        // have both bots make one move each to start training
+        string curr_state = currBoard.getBoardState();
+        pair<int, int> curr_move = Bots.makeMoveQLearning(curr_state, epsilon);
+        currBoard.playerAction(curr_move);
+        curr_state = currBoard.getBoardState();
+        curr_move = Bots.makeMoveQLearning(curr_state, epsilon);
+        currBoard.playerAction(curr_move);
+
+        // game runs as long as no one has won (or no draw)
+        while(game_ended == 0) {
+            // only calculate new action-values if game has not ended
+            vector<pair<int, int>> episode_hist = currBoard.getEpisodeHistory();
+            Bots.adjustActionValue(curr_state, episode_hist);
+
+            curr_move = Bots.makeMoveQLearning(curr_state, epsilon);
+            currBoard.playerAction(curr_move);
+            curr_state = currBoard.getBoardState();
+            game_ended = currBoard.checkGameEnded();
+        }
+
+        // calculate action-values when game has ended
+        Bots.adjustTerminalActionVals(curr_state, currBoard.getEpisodeHistory(), game_ended);
     }
 }
