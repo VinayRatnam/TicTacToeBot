@@ -2,7 +2,7 @@
 	"artifacts" : 
 	[
 		{
-			"path" : "MyGameProject"
+			"path" : "tictactoe_bot"
 		}
 	],
 	"backtrace" : 1,
@@ -10,7 +10,8 @@
 	{
 		"commands" : 
 		[
-			"add_executable"
+			"add_executable",
+			"target_compile_options"
 		],
 		"files" : 
 		[
@@ -24,7 +25,13 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 21,
+				"line" : 14,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 17,
 				"parent" : 0
 			}
 		]
@@ -36,6 +43,14 @@
 			[
 				{
 					"fragment" : "-g -std=gnu++17 -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX14.5.sdk -mmacosx-version-min=14.0 -fcolor-diagnostics"
+				},
+				{
+					"backtrace" : 2,
+					"fragment" : "-Wall"
+				},
+				{
+					"backtrace" : 2,
+					"fragment" : "-Wextra"
 				}
 			],
 			"language" : "CXX",
@@ -53,7 +68,7 @@
 			]
 		}
 	],
-	"id" : "MyGameProject::@6890427a1f51a3e7e1df",
+	"id" : "tictactoe_bot::@6890427a1f51a3e7e1df",
 	"link" : 
 	{
 		"commandFragments" : 
@@ -69,8 +84,8 @@
 		],
 		"language" : "CXX"
 	},
-	"name" : "MyGameProject",
-	"nameOnDisk" : "MyGameProject",
+	"name" : "tictactoe_bot",
+	"nameOnDisk" : "tictactoe_bot",
 	"paths" : 
 	{
 		"build" : ".",

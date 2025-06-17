@@ -8,6 +8,7 @@
 #include <iostream>
 #include <cmath>
 #include <fstream>
+#include "Board.h"
 
 // Forward declarations to avoid dependency issues if Board needs Players or vice-versa
 class Players;
@@ -175,24 +176,37 @@ public:
 
     }
 
-
-
     /**
-     * @brief Function creates a csv of bot's policies for all states
-     *
-     * @format (Long/Tidy Format) The csv's format for each line will be:
-     * state,action,probability\n
-     * This means each line will store a state along with one of its actions
-     * and that action's corresponding probability
-     *
-     * @return true if csv was created successfully, false otherwise
+     * @brief Run a hundred of episodes and obtain avg trajectory action_value for Player X and Player O
      */
-    bool createCSVPolicies() {
+    void generateData(fstream& outputFile, bool is_MC) {
+        int episodes = 100;
 
+        for (int i = 0; i < episodes; i++) {
+            Board:Board currBoard;
+            bool game_ended = false;
+
+            // obtain final state of board and episode history to find avg action_value
+            while (!game_ended) {
+                string curr_state = currBoard.getBoardState();
+                pair<int,int> move;
+                if (is_MC) {
+                    move = makeMoveMC(curr_state, 0);
+                }
+                else {
+                    move = makeMoveQLearning(curr_state, 0);
+                }
+
+                currBoard.playerAction(move);
+
+                game_ended = currBoard.checkGameEnded();
+            }
+
+            // now we have all of the episode history to find avg action value of episode
+            float curr_avg_action_val = 0;
+
+        }
     }
-
-    bool createCSVActionValues() {}
-
 
 private:
     void createStates(pair<string, pair<int,int>> curr_state) {

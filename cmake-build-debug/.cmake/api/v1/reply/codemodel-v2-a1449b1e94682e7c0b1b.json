@@ -27,7 +27,7 @@
 					[
 						0
 					],
-					"name" : "MyGameProject",
+					"name" : "TicTacToeBot",
 					"targetIndexes" : 
 					[
 						0
@@ -38,9 +38,9 @@
 			[
 				{
 					"directoryIndex" : 0,
-					"id" : "MyGameProject::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-MyGameProject-Debug-d2b30930d764175030fb.json",
-					"name" : "MyGameProject",
+					"id" : "tictactoe_bot::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-tictactoe_bot-Debug-8a97097e8a41c42afde2.json",
+					"name" : "tictactoe_bot",
 					"projectIndex" : 0
 				}
 			]

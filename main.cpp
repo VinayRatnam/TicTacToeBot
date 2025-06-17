@@ -271,16 +271,6 @@ void trainingMC(Players &Bots) {
     }
     cout << "Training completed." << endl;
 
-    string create_csv;
-    cout << "Would you like to add finalized policy and action-values to a csv file (Y/N)?" << endl;
-    cin >> create_csv;
-
-    if (create_csv == "Y") {
-
-    }
-    else {
-        return;
-    }
 }
 
 /**
