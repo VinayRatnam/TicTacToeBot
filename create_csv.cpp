@@ -105,3 +105,11 @@ int create_csv() {
     cout << "Training Completed." << endl;
 
 }
+
+int main() {
+    // Call the function that contains all your logic
+    create_csv();
+
+    // Return 0 to indicate the program finished successfully
+    return 0;
+}

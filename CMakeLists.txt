@@ -12,9 +12,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # from the main.cpp source file. CMake will automatically
 # figure out the header dependencies.
 add_executable(
-        main.cpp
+        generate_csv_executable
         create_csv.cpp
 )
 
 # Optional: Add compiler flags for warnings
-target_compile_options(tictactoe_bot PRIVATE -Wall -Wextra)
+target_compile_options(generate_csv_executable PRIVATE -Wall -Wextra)
