@@ -179,8 +179,11 @@ public:
     /**
      * @brief Run a hundred of episodes and obtain avg trajectory action_value for Player X and Player O
      */
-    void generateData(fstream& outputFile, bool is_MC) {
+    void generateData(ofstream& outputFile, bool is_MC, int completed_trials) {
         int episodes = 100;
+
+        float total_avg_x = 0;
+        float total_avg_o = 0;
 
         for (int i = 0; i < episodes; i++) {
             Board:Board currBoard;
@@ -203,9 +206,61 @@ public:
             }
 
             // now we have all of the episode history to find avg action value of episode
-            float curr_avg_action_val = 0;
+            float avg_x_action_val = 0;
+            float avg_o_action_val = 0;
 
+            vector<pair<int,int>> episode_hist = currBoard.getEpisodeHistory();
+            string curr_state = currBoard.getBoardState();
+
+            int num_moves = episode_hist.size();
+            for (int i = num_moves-1; i >= 0; i--) {
+                curr_state = goBackOneMove(curr_state, episode_hist[i]);
+                int curr_move = episode_hist[i].first * 3 + episode_hist[i].second;
+                // logic for x's move
+                if (i % 2 == 0) {
+                    avg_x_action_val += action_values[curr_state][curr_move];
+                }
+                else {
+                    avg_o_action_val += action_values[curr_state][curr_move];
+                }
+            }
+            int o_moves = (num_moves / 2);
+            int x_moves = num_moves - o_moves;
+
+            avg_o_action_val /= o_moves;
+            avg_x_action_val /= x_moves;
+
+            // now that we have the avg action val for this episode, add it on to the avg total
+            total_avg_o += avg_o_action_val;
+            total_avg_x += avg_x_action_val;
         }
+
+        total_avg_o /= 100;
+        total_avg_x /= 100;
+
+        // need to insert data into csv file
+
+        // insert O data
+        outputFile << completed_trials << ",";
+        if (is_MC) {
+            outputFile << "MC,";
+        }
+        else {
+            outputFile << "Q-Learning";
+        }
+        outputFile << "O,";
+        outputFile << total_avg_o << "\n";
+
+        // insert X data
+        outputFile << completed_trials << ",";
+        if (is_MC) {
+            outputFile << "MC,";
+        }
+        else {
+            outputFile << "Q-Learning";
+        }
+        outputFile << "X,";
+        outputFile << total_avg_x << "\n";
     }
 
 private:
