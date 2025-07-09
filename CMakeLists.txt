@@ -11,7 +11,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Tell CMake to create an executable named "tictactoe_bot"
 # from the main.cpp source file. CMake will automatically
 # figure out the header dependencies.
-add_executable(tictactoe_bot main.cpp)
+add_executable(
+        main.cpp
+        create_csv.cpp
+)
 
 # Optional: Add compiler flags for warnings
 target_compile_options(tictactoe_bot PRIVATE -Wall -Wextra)
