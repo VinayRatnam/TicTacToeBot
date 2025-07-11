@@ -257,7 +257,7 @@ public:
             outputFile << "MC,";
         }
         else {
-            outputFile << "Q-Learning";
+            outputFile << "Q-Learning,";
         }
         outputFile << "X,";
         outputFile << total_avg_x << "\n";
